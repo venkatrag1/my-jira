@@ -8,10 +8,7 @@ pub fn get_column_string(text: &str, width: usize) -> String {
         Ordering::Less => format!("{:<width$}", text),
         _ => {
             match width {
-                0 => "".to_owned(),
-                1 => ".".to_owned(),
-                2 => "..".to_owned(),
-                3 => "...".to_owned(),
+                0..=3 => format!("{:.<width$}", ""),
                 _ => text.truncate_ellipse(width-3).to_string(),
             }
         }
