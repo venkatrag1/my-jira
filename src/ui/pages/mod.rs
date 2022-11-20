@@ -24,7 +24,11 @@ impl Page for HomePage {
         println!("     id     |               name               |      status      ");
 
         // TODO: print out epics using get_column_string(). also make sure the epics are sorted by id
-
+        let epics = self.db.read_db()?.epics;
+        for id in epics.keys().sorted() {
+            let epic = &epics[id];
+            println!("{} | {} | {}", get_column_string(&id.to_string(), 11), get_column_string(&epic.name, 32), get_column_string(&epic.status.to_string(), 17));
+        }
         println!();
         println!();
 
@@ -34,7 +38,21 @@ impl Page for HomePage {
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
-        todo!() // match against the user input and return the corresponding action. If the user input was invalid return None.
+        // match against the user input and return the corresponding action. If the user input was invalid return None.
+        let epics = self.db.read_db()?.epics;
+
+        match input {
+            "q" => Ok(Some(Action::Exit)),
+            "c" => Ok(Some(Action::CreateEpic)),
+            input => {
+                if let Ok(epic_id) = input.parse::<u32>() {
+                    if epics.contains_key(&epic_id) {
+                        return Ok(Some(Action::NavigateToEpicDetail { epic_id }));
+                    }
+                }
+                Ok(None)
+            }
+        }
     }
 }
 

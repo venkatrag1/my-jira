@@ -1,7 +1,21 @@
 use ellipse::Ellipse;
+use std::cmp::Ordering;
 
 pub fn get_column_string(text: &str, width: usize) -> String {
-    todo!() // use the truncate_ellipse function from the ellipse crate
+    let textlen = text.len();
+    match textlen.cmp(&width) {
+        Ordering::Equal => text.to_owned(),
+        Ordering::Less => format!("{:<width$}", text),
+        _ => {
+            match width {
+                0 => "".to_owned(),
+                1 => ".".to_owned(),
+                2 => "..".to_owned(),
+                3 => "...".to_owned(),
+                _ => text.truncate_ellipse(width-3).to_string(),
+            }
+        }
+    }
 }
 
 #[cfg(test)]
