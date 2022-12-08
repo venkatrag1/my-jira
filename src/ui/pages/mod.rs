@@ -118,6 +118,10 @@ impl Page for EpicDetail {
             }
         }
     }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
 }
 
 pub struct StoryDetail {
@@ -156,6 +160,10 @@ impl Page for StoryDetail {
                 Ok(None)
             }
         }
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 
